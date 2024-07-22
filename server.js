@@ -1,6 +1,6 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
@@ -12,6 +12,13 @@ connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:5173",],
+    methods: ["GET,HEAD,PUT,PATCH,POST,DELETE"],
+  })
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/task", taskRoutes);

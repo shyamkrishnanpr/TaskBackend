@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { validationResult } from "express-validator";
+import { OAuth2Client } from "google-auth-library";
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -74,10 +75,38 @@ export const loginUser = async (req, res) => {
 
 // google auth
 
-export const googleAuth = passport.authenticate("google", {
-  scope: ["profile", "email"],
-});
+// export const googleAuth = async (req, res) => {
+//   console.log("here");
+//   const client = new OAuth2Client(process.env.CLIENT_ID);
+//   const { token } = req.body;
 
-export const googleAuthCallback = async (req, res) => {
-  res.redirect("/home");
-};
+//   try {
+//     const ticket = await client.verifyIdToken({
+//       idToken: token,
+//       audience: process.env.CLIENT_ID,
+//     });
+
+//     const { sub, name, email, picture } = ticket.getPayload();
+
+//     let user = await User.findOne({ googleId: sub });
+
+//     if (!user) {
+//       user = await User.create({
+//         googleId: sub,
+//         firstname: name,
+//         lastname: name,
+//         email,
+//       });
+//     }
+
+//     res.json({
+//       _id: user._id,
+//       firstname: user.firstname,
+//       lastname: user.lastname,
+//       email: user.email,
+//       token: generateToken(user._id),
+//     });
+//   } catch (error) {
+//     res.status(400).json({ error: "Invalid Google Token" });
+//   }
+// };
