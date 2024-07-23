@@ -4,6 +4,10 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import passport from "passport";
+import cookieSession from "cookie-session";
+import passportSetup from "./config/passport.js";
+import session from "express-session";
 
 dotenv.config();
 
@@ -11,6 +15,17 @@ const app = express();
 connectDB();
 
 app.use(express.json());
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
@@ -23,7 +38,7 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/task", taskRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
