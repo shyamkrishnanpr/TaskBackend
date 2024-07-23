@@ -40,9 +40,14 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:5174/login",
+  }),
   (req, res) => {
-    res.json({ message: "User login successfully" });
+    // On success, redirect to a special route in React
+
+    console.log(res, "gcbwudhscbwdn");
+    res.redirect("http://localhost:5174/task");
   }
 );
 
